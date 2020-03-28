@@ -1,0 +1,10 @@
+#imagecanvas {
+    /*border: 10px solid red;*/
+}
+.rectangle {
+    border: 1px solid #FF0000;
+    position: absolute;
+}
+body {
+  background-color: lightblue;
+}

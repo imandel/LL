@@ -4,56 +4,29 @@
 	<h1>Hello World</h1>
 	<meta charset="utf-8" />
 	<title>Upload test</title>
+  <link rel = "stylesheet"
+   type = "text/css"
+   href = "style.css" />
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
 <div id="filesubmit">
-  <input type="file" class="file-select" accept="image/*"/>
+  <input type="file" id='filein' class="file-select" accept="image/*"/>
+  <br>
+  <textarea rows="10", cols="50"/></textarea> 
+  <br>
   <button class="file-submit">SUBMIT</button>
 </div>
+<div>
+  <canvas id = "imagecanvas" width="800" height="500">
+  </canvas>
+  <input type='file' onchange="readURL(this);" />
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
 
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
-<script>
-  // Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyCT3EDBWfF7PVjI2xtBoP4ggZkBbSGWYcU",
-    authDomain: "ll-art.firebaseapp.com",
-    databaseURL: "https://ll-art.firebaseio.com",
-    projectId: "ll-art",
-    storageBucket: "ll-art.appspot.com",
-    messagingSenderId: "612626647296",
-    appId: "1:612626647296:web:3f162a78dd7864e3638be5"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const storageService = firebase.storage();
-  const storageRef = storageService.ref();
-  
-  document.querySelector('.file-select').addEventListener('change', handleFileUploadChange);
-  document.querySelector('.file-submit').addEventListener('click', handleFileUploadSubmit);
-  
-  let selectedFile;
-  function handleFileUploadChange(e) {
-  selectedFile = e.target.files[0];
-}
-
-function handleFileUploadSubmit(e) {
-  const uploadTask = storageRef.child(`images/${selectedFile.name}`).put(selectedFile); //create a child directory called images, and place the file inside this directory
-  uploadTask.on('state_changed', (snapshot) => {
-  // Observe state change events such as progress, pause, and resume
-  }, (error) => {
-    // Handle unsuccessful uploads
-    console.log(error);
-  }, () => {
-     // Do something once upload is complete
-     alert('Love Letter Uploaded');
-     console.log('success');
-//      window.alert('test');
-  });
-}
-</script>
+<script type="text/javascript" src="script.js"></script>
 </body>
 </html>
