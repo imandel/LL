@@ -1,10 +1,65 @@
-#imagecanvas {
+.image-canvas {
     /*border: 10px solid red;*/
+    position: absolute;
+	top: 0;
+	left: 0;
+	width: 95%;
+	height: auto;
+}
+.annotation-canvas{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 95%; 
+	height: auto;
 }
 .rectangle {
     border: 1px solid #FF0000;
     position: absolute;
 }
 body {
-  background-color: lightblue;
+	background-color: lightblue;
+}
+
+.canvas-container{
+	position: relative;
+}
+.pages{
+	/*display: flex;
+	flex-direction: column;*/
+	border: 10px solid orange;
+	background-color: blue; 
+	/*position: relative;*/
+}
+.page{
+	position: static;
+	margin-bottom: 10px;
+	/*border: 10px solid orange;*/
+}
+
+#uploadContainer{
+	display: none;
+	background-color: ghostwhite;
+	position: fixed;
+	width: 300px;
+	height: 120px;
+	top: 50%;
+	left: 50%;
+	margin-top: -150px; /* Negative half of height. */
+	margin-left: -150px; /* Negative half of width. */
+}
+
+#test > p{
+	text-align: center;
+}
+
+#upload{
+	text-align: center;
+	/*position: fixed;*/
+	/*top: 50%;*/
+	/*left: 50%;*/
+}
+#progress{
+	display: block;
+	margin: auto;
 }

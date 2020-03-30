@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<h1>Hello World</h1>
-	<meta charset="utf-8" />
-	<title>Upload test</title>
+	<title>AI LOVE LETTERS</title>
   <link rel = "stylesheet"
    type = "text/css"
    href = "style.css" />
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
+  <h1>AI Love Letters</h1>
+  <meta charset="utf-8" />
 <div id="filesubmit">
   <input type="file" id='filein' class="file-select" accept="image/*"/>
   <br>
   <textarea rows="10", cols="50"/></textarea> 
   <br>
-  <button class="file-submit">SUBMIT</button>
+  <button class="file-submit" onclick="handleFileUploadSubmit(this)">SUBMIT</button>
 </div>
-<div>
-  <canvas id = "imagecanvas" width="800" height="500">
-  </canvas>
-  <input type='file' onchange="readURL(this);" />
-<!-- The core Firebase JS SDK is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
+<input type='file' id="filein" multiple="multiple" onchange="readURL(this);" />
+<div id='pages' class = 'pages'>
+</div>
+<div id='uploadContainer'>
+  <p id ='upload'>Uploading...</p>
+  <progress id="progress" value="0" max="100"></progress>
+  <p>Uploaded page <span id="pageNo"></span></p>
+</div>
 
-<!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
+</div>
+  
+<script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase-storage.js"></script>
 <script type="text/javascript" src="script.js"></script>
 </body>
+
 </html>
