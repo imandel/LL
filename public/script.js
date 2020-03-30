@@ -39,6 +39,10 @@ function drawImageActualSize() {
   annotations.onmouseup = canvasMouseUp;
   annotations.onmousemove = canvasMouseMove;
 
+  annotations.ontouchstart = handleStart;
+  annotations.ontouchend = handleEnd;
+  annotations.ontouchmove = handleMove;
+
   ctx.drawImage(this, 0, 0);
 }
 
@@ -65,6 +69,7 @@ function handleFileUploadSubmit(e) {
 
   sent.innerText= '0/' +baseString.length;
   progressBar.parentElement.style.display= "block";
+  progressBar.parentElement.style.top= "0px";
   
 
   baseString.forEach((base, i)=>{
@@ -137,10 +142,51 @@ function canvasMouseMove(e){
     ctx.beginPath();
     var width = mousex - last_mousex;
     var height = mousey - last_mousey;
-    ctx.rect(last_mousex, last_mousey, width, height);
+    ctx.fillRect(last_mousex, last_mousey, width, height);
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 5;
     ctx.stroke();
   }
+}
 
+// document.addEventListener("touchmove", handleMove, false);
+
+function handleStart(e) {
+  e.preventDefault();
+  if(e.touches.length===1){
+    console.log(e.touches[0].clientX)
+    var BB=this.getBoundingClientRect();
+    canvasx=BB.left;
+    canvasy=BB.top;
+    last_mousex =  Math.round( (e.touches[0].clientX-canvasx) * (this.width / this.offsetWidth) );//parseInt(e.clientX-canvasx);
+    last_mousey = Math.round( (e.touches[0].clientY-canvasy) * (this.height / this.offsetHeight) );//parseInt(e.clientY-canvasy);
+    mousedown = true;
+  }
+}
+
+function handleEnd(e){
+  e.preventDefault();
+    mousedown = false;
+    let imagecanvas_ctx= $(this).prev('.image-canvas')[0].getContext('2d')
+    imagecanvas_ctx.drawImage(this, 0, 0);
+  
+}
+
+function handleMove(e){
+  e.preventDefault()
+  if(e.touches.length===1){
+    mousex = Math.round( (e.touches[0].clientX-canvasx) * (this.width / this.offsetWidth) );//parseInt(e.clientX - canvasx);
+    mousey = Math.round( (e.touches[0].clientY-canvasy) * (this.height / this.offsetHeight) );//parseInt(e.clientY - canvasy);
+    let ctx = this.getContext('2d');
+    if (mousedown) {
+      ctx.clearRect(0, 0, this.width, this.height); //clear canvas
+      ctx.beginPath();
+      var width = mousex - last_mousex;
+      var height = mousey - last_mousey;
+      ctx.fillRect(last_mousex, last_mousey, width, height);
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 5;
+      ctx.stroke();
+    }
+  }
 }

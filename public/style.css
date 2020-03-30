@@ -27,7 +27,7 @@ body {
 .pages{
 	/*display: flex;
 	flex-direction: column;*/
-	border: 10px solid orange;
+	/*border: 10px solid orange;*/
 	background-color: blue; 
 	/*position: relative;*/
 }
@@ -38,15 +38,15 @@ body {
 }
 
 #uploadContainer{
-	display: none;
+	display: block;
 	background-color: ghostwhite;
 	position: fixed;
 	width: 300px;
 	height: 120px;
-	top: 50%;
+	top: -120px;
 	left: 50%;
-	margin-top: -150px; /* Negative half of height. */
-	margin-left: -150px; /* Negative half of width. */
+	margin-left: -150px;
+	transition: top 1s;
 }
 
 #test > p{
@@ -62,4 +62,13 @@ body {
 #progress{
 	display: block;
 	margin: auto;
+}
+textarea{
+	width:  calc(100vw - 20px);
+}
+@media only screen and (min-width: 768px) {
+	textarea{
+	width:  50%;
+}
+  	/*height: calc(100vh - 20px);*/
 }
