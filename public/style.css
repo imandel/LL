@@ -28,7 +28,7 @@ body {
 	/*display: flex;
 	flex-direction: column;*/
 	/*border: 10px solid orange;*/
-	background-color: blue; 
+	/*background-color: blue; */
 	/*position: relative;*/
 }
 .page{
@@ -38,7 +38,7 @@ body {
 }
 
 #uploadContainer{
-	display: block;
+	display: none;
 	background-color: ghostwhite;
 	position: fixed;
 	width: 300px;

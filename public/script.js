@@ -22,11 +22,23 @@ const pages= document.getElementById('pages')
 let i =0;
 function drawImageActualSize() {
   ++i;
+  let height =this.width;
+  let width = this.height;
+
+
+  if([5, 6, 7, 8].includes(this.EXIFOrientation)){
+    width = this.height;
+    height = this.width;
+  }
+
   const page = Object.assign(document.createElement('div'), {id: 'page-'+i, className: 'page'})
   const canvasContainer = Object.assign(document.createElement('div'), {className: 'canvas-container'})
-  const canvas = Object.assign(document.createElement('canvas'), {id: 'imagecanvas-'+i, className: 'image-canvas', height: this.height, width: this.width})
-  const annotations = Object.assign(document.createElement('canvas'), {id: 'annotation-canvas-'+i, className: 'annotation-canvas', height: this.height, width: this.width})
-  
+  const canvas = Object.assign(document.createElement('canvas'), {id: 'imagecanvas-'+i, className: 'image-canvas', height: height, width:width})
+  const annotations = Object.assign(document.createElement('canvas'), {id: 'annotation-canvas-'+i, className: 'annotation-canvas', height: height, width:width})
+  // console.log(this)
+  console.log(`orientation ${this.EXIFOrientation}`)
+  console.log(`orientation window ${window.image.EXIFOrientation}`)
+
   canvasContainer.appendChild(canvas);
   canvasContainer.appendChild(annotations);
   page.appendChild(canvasContainer);
@@ -34,6 +46,35 @@ function drawImageActualSize() {
   pages.appendChild(document.createElement('br'));
   const ctx = canvas.getContext('2d');
   const annotation_ctx = annotations.getContext('2d');
+
+  switch (this.EXIFOrientation) {
+              case 2:
+                  ctx.transform(-1, 0, 0, 1, this.width, 0);
+                  break;
+              case 3:
+                  ctx.transform(-1, 0, 0, -1, this.width, this.height);
+                  break;
+              case 4:
+                  ctx.transform(1, 0, 0, -1, 0, this.height);
+                  break;
+              case 5:
+                  ctx.transform(0, 1, 1, 0, 0, 0);
+                  break;
+              case 6:
+                  ctx.transform(0, 1, -1, 0, this.height, 0);
+                  break;
+              case 7:
+                  ctx.transform(0, -1, -1, 0, this.height, this.width);
+                  break;
+              case 8:
+                  ctx.transform(0, -1, 1, 0, 0, this.width);
+                  break;
+              default:
+                  ctx.transform(1, 0, 0, 1, 0, 0);
+          }
+
+
+
   
   annotations.onmousedown = canvasMouseDown;
   annotations.onmouseup = canvasMouseUp;
@@ -44,22 +85,71 @@ function drawImageActualSize() {
   annotations.ontouchmove = handleMove;
 
   ctx.drawImage(this, 0, 0);
+  ctx.setTransform(1,0,0,1,0,0);
 }
 
+$("#textletter").keyup(function(){
+
+  $('#textsubmit').prop("disabled", (this.value === "")? true : false);
+});
+
 function readURL(input) {
+  $('#filesubmit').prop('disabled', false);
   if (input.files && input.files[0]) {
     const files = input.files;
     Array.from(files).forEach((file) =>{
       const reader = new FileReader();
       const image = new Image();
+      window.image=image;
       image.onload = drawImageActualSize
-      reader.onload = (e) =>{
-        image.src=e.target.result
+      reader.onload = function(e){
+
+        EXIF.getData(file, function(){
+          let orientation = EXIF.getAllTags(this).Orientation
+          image.EXIFOrientation = EXIF.getAllTags(this).Orientation;
+          console.log('setting orientation')
+          image.src=e.target.result
+        })
+       
+        console.log('setting')
+        
+
       };
       reader.readAsDataURL(file);
     })
   }
 }
+
+// function readURL(input) {
+      // If file is loaded, create new FileReader
+        // if (input.files && input.files[0]) {
+          
+        // // Create a FileReader
+        //   var reader = new FileReader();
+        //   // Set onloadend function on reader
+        //   reader.onloadend = function (e) {
+            
+        //   // Update an image tag with loaded image source
+        //     $('#myImg').attr('src', e.target.result);
+        //     // Use EXIF library to handle the loaded image exif orientation
+        //     EXIF.getData(input.files[0], function() {
+              
+        //     // Fetch image tag
+        //           var img = $("#myImg").get(0);
+        //           // Fetch canvas
+        //     var canvas = $("#myCanvas").get(0);
+        //   // run orientation on img in canvas
+        //           orientation(img, canvas);
+        //   });
+        // };
+        
+        // // Trigger reader to read the file input
+        // reader.readAsDataURL(input.files[0]);
+      // }
+    // }
+
+
+
 
 function handleFileUploadSubmit(e) {
   const baseString=[...document.querySelectorAll(".image-canvas")].map(n => n.toDataURL())
@@ -178,6 +268,7 @@ function handleMove(e){
     mousex = Math.round( (e.touches[0].clientX-canvasx) * (this.width / this.offsetWidth) );//parseInt(e.clientX - canvasx);
     mousey = Math.round( (e.touches[0].clientY-canvasy) * (this.height / this.offsetHeight) );//parseInt(e.clientY - canvasy);
     let ctx = this.getContext('2d');
+    // ctx.setTransform(0, 1, -1, 0, this.height, 0);
     if (mousedown) {
       ctx.clearRect(0, 0, this.width, this.height); //clear canvas
       ctx.beginPath();
